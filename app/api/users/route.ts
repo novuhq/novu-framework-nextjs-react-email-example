@@ -7,7 +7,7 @@ export async function POST(request: Request) {
 
   await novu.trigger('new-signup', {
     to: {
-      subscriberId: 'echo-sub',
+      subscriberId: 'novu-sub',
     },
     payload: {
       email: res.email,
