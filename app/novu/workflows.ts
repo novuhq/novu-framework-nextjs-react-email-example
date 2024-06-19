@@ -1,22 +1,20 @@
-import { Echo } from "@novu/echo";
+import { Client, workflow } from "@novu/framework";
 import { renderReactEmail } from "./vercel-example";
 import { renderReactAWSEmail } from "./awsEx";
 import { renderReactAppleEmail } from "./apple";
 
 
 
-export const echo = new Echo({
+export const client = new Client({
   apiKey: '<NOVU_API_KEY>',
   /**
-   * Enable this flag only during local development
+   * Disable this flag only during local development
    */
-
-  // backendUrl: 'https://api.novu.co',
-  devModeBypassAuthentication: process.env.NODE_ENV === "development",
+  strictAuthentication: process.env.NODE_ENV !== "development",
 });
 
 
-const newSignup = echo.workflow('new-signup', async ({ step, payload }) => {
+export const signupWorkflow = workflow('new-signup', async ({ step, payload }) => {
   // Send a welcome email
   await step.email('send-email', async (inputs) => {
     return {
@@ -63,7 +61,7 @@ const newSignup = echo.workflow('new-signup', async ({ step, payload }) => {
 }, { payloadSchema: { properties: { text: { type: 'string' } } } });
 
 
-// const awsEx = echo.workflow('aws-example', async ({ step, payload }) => {
+// export const awsWorkflow = workflow('aws-example', async ({ step, payload }) => {
 //   // Send a welcome email
 //   await step.email('send-email', async () => {
 //     return {
@@ -76,7 +74,7 @@ const newSignup = echo.workflow('new-signup', async ({ step, payload }) => {
 
 
 
-// const appleEx = echo.workflow('apple-receipt', async ({ step, payload }) => {
+// export const appleWorkflow = workflow('apple-receipt', async ({ step, payload }) => {
 //   // Send a welcome email
 //   await step.email('send-email', async () => {
 //     return {
